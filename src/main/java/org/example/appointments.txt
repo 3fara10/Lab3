@@ -1,0 +1,5 @@
+348;343;John;Doe;30;dum. nov. 01 10:00;General Checkup
+349;344;Jane;Smith;25;lun. nov. 02 11:00;Dental Consultation
+350;345;Alice;Johnson;40;mar. nov. 03 12:00;Followup
+351;345;Alice;Johnson;40;mar. nov. 03 12:00;Folloup
+352;345;Alice;Johnson;40;mar. nov. 03 12:00;Foow
