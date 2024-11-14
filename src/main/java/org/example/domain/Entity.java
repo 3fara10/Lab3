@@ -1,45 +1,43 @@
 package org.example.domain;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.example.domain.factory.EntityDeserializer;
 
-import java.io.*;
-import java.util.Scanner;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Represents an entity with a unique identifier.
  */
-//@JsonTypeInfo(
-//        use = JsonTypeInfo.Id.NAME,
-//        include = JsonTypeInfo.As.PROPERTY,
-//        property = "type"
-//)
-//@JsonSubTypes({
-//        @JsonSubTypes.Type(value = Patient.class, name = "patient"),
-//        @JsonSubTypes.Type(value = Appointment.class, name = "appointment")
-//})
-//@JsonDeserialize(using = EntityDeserializer.class)
 @JsonTypeName("entity")
-//@JacksonXmlRootElement(localName = "Entities")
-public abstract class Entity implements Serializable{
-   // @JacksonXmlElementWrapper(useWrapping = false)
+@XmlRootElement(name = "entity") // Marking this class as the root element for XML serialization
+@XmlSeeAlso({Patient.class, Appointment.class})
+@XmlType(propOrder = {"id"})
+// This annotation is used to define subclasses to be serialized
+public abstract class Entity implements Serializable {
+
     protected int id;
-    private static final IdGenerator idGenerator=IdGenerator.getInstance("C:\\Users\\anton\\IdeaProjects\\Lab3\\src\\main\\java\\org\\example\\entityId.txt");
+    private static final IdGenerator idGenerator = IdGenerator.getInstance("C:\\Users\\anton\\IdeaProjects\\Lab3\\src\\main\\java\\org\\example\\entityId.txt");
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**The constructor of the Entity class.*/
-    public Entity(){
-        this.id=idGenerator.generateID();
+    // Default constructor for JAXB
+    public Entity() {
+        this.id = idGenerator.generateID(); // Generate a new ID when an entity is created
     }
 
-    /**It returns the id of the Entity*/
+    // Getter for ID - this will be serialized as an XML attribute
+    @XmlAttribute(name = "id") // Marks the id field as an XML attribute
     public int getId() {
         return id;
+    }
+
+    public int setId(int id) {
+        return this.id = id;
     }
 
     @Override

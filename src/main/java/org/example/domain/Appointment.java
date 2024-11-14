@@ -1,58 +1,49 @@
 package org.example.domain;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.example.domain.factory.EntityDeserializer;
-import org.example.exceptions.ValidationException;
-import org.example.validators.IValidator;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import javax.xml.bind.annotation.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
-/**Represents an Appointment entity with patient,date and purpose of the Appointment.
+
+/**
+ * Represents an Appointment entity with patient, date, and purpose of the Appointment.
  * Each Appointment has a unique id inherited from Entity superclass.
  */
-
-//@JsonTypeInfo(
-//        use = JsonTypeInfo.Id.NAME,
-//        include = JsonTypeInfo.As.PROPERTY,
-//        property = "type"
-//)
-//@JsonSubTypes({
-//        @JsonSubTypes.Type(value = Patient.class, name = "patient"),
-//        @JsonSubTypes.Type(value = Appointment.class, name = "appointment")
-//})
-//@JsonDeserialize(using = EntityDeserializer.class)
 @JsonTypeName("appointment")
+@XmlRootElement(name = "appointment")
+@XmlType(propOrder = {"id", "patient", "date", "purposeAppointment"})// Define the root element name in XML
 public class Appointment extends Entity implements Serializable {
+
     private Patient patient;
     private Date date;
     private String purposeAppointment;
+
     @Serial
     private static final long serialVersionUID = 1L;
 
+    // Default constructor for JAXB
     public Appointment() {}
-    /**The constructor of the Appointment class.*/
+
+    // Constructor to initialize fields
     public Appointment(Patient patient, Date date, String purposeAppointment) {
-        //Initialize the unique id from the Entity class
-        super();
+        super(); // Initialize unique id from the Entity class
         this.patient = patient;
         this.date = date;
         this.purposeAppointment = purposeAppointment;
     }
 
-    public Appointment(int id,Patient patient, Date date, String purposeAppointment) {
-        //Initialize the unique id from the Entity class
-        this.id=id;
+    public Appointment(int id, Patient patient, Date date, String purposeAppointment) {
+        super(); // Initialize unique id from the Entity class
+        this.id = id;
         this.patient = patient;
         this.date = date;
         this.purposeAppointment = purposeAppointment;
     }
 
-    //The getters and setters
+    // Getter and Setter for Patient
+    @XmlElement(name = "patient") // Marks the patient field as an XML element
     public Patient getPatient() {
         return patient;
     }
@@ -61,6 +52,8 @@ public class Appointment extends Entity implements Serializable {
         this.patient = patient;
     }
 
+    // Getter and Setter for Purpose of Appointment
+    @XmlElement(name = "purposeAppointment") // Marks the purposeAppointment field as an XML element
     public String getPurposeAppointment() {
         return purposeAppointment;
     }
@@ -69,6 +62,8 @@ public class Appointment extends Entity implements Serializable {
         this.purposeAppointment = purposeAppointment;
     }
 
+    // Getter and Setter for Date
+    @XmlElement(name = "date") // Marks the date field as an XML element
     public Date getDate() {
         return date;
     }
@@ -77,9 +72,15 @@ public class Appointment extends Entity implements Serializable {
         this.date = date;
     }
 
+    // Optionally add @XmlAttribute for 'id' field if you want to serialize it as an attribute
+    @XmlAttribute(name = "id") // Marks the id as an XML attribute instead of an element
+    @Override
+    public int getId() {
+        return super.getId();
+    }
+
     @Override
     public String toString() {
         return super.toString() + ", Patient: " + patient + ", Date: " + date + ", The purpose of the appointment: " + purposeAppointment;
     }
-
 }
